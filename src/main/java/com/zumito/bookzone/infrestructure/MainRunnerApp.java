@@ -7,8 +7,11 @@ import com.zumito.bookzone.service.ApiRequest;
 import com.zumito.bookzone.service.DataConverter;
 
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class MainRunnerApp {
     private static final String URL_BASE = "https://gutendex.com/books/";
@@ -36,7 +39,7 @@ public class MainRunnerApp {
         var bookToSearch = input.nextLine();
         json = apiRequest.obtenerDatos(URL_BASE+"?search="+bookToSearch.replace(" ", "+"));
         var booksResult = dataConverter.dataConvert(json, GeneralData.class);
-        System.out.println(booksResult);
+        //System.out.println(booksResult);
 
         //se emplea un optional del tipo "DataBook" porque puede o no puede encontrar el libro
         Optional<DataBooks> searchedBook = booksResult.resultsList().stream()
@@ -47,6 +50,15 @@ public class MainRunnerApp {
             System.out.println("Libro encontrado!");
             System.out.println(searchedBook.get()); //se muestran todos los datos
         }
+
+        //Añadiendo estadisticas
+        DoubleSummaryStatistics est = booksResult.resultsList().stream()
+                .filter(d -> d.downloads()>0) //se eliminan los libros con 0 descargas
+                .collect(Collectors.summarizingDouble(DataBooks::downloads));
+        System.out.println("Cantidad media de descargas: " + est.getAverage());
+        System.out.println("Cantidad maxiamde descargas: " + est.getMax());
+        System.out.println("Cantidad minima de descargas: " + est.getMin());
+        System.out.println("Libros totales para calcular las estadisicas: " + est.getCount());
 
     }
 }
