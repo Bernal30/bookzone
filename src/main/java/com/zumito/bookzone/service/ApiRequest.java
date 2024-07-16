@@ -6,6 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+//clase dedicada para las solicitudes  la API
 public class ApiRequest {
     public String obtenerDatos(String url) {
         HttpClient client = HttpClient.newHttpClient();

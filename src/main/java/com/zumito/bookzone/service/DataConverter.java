@@ -3,6 +3,7 @@ package com.zumito.bookzone.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//Clase dedicada a la conbversión de json a Java
 public class DataConverter implements IDataConverter {
     private ObjectMapper mapper = new ObjectMapper();
 
